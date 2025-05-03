@@ -193,8 +193,7 @@ def main():
     while True:
         response_1 = input("What would you like to do? Enter A to guess an album, enter B to guess a song title based on lyrics, or enter C to guess an album title from its cover.")
         if response_1.lower() == "a":
-            album_names = []
-            score = 0
+            score = 50
             
             response_4 = input("Enter a genre to guess an album from: ")
             response_15 = input("Enter a decade (Ex: 2020s): ")
@@ -205,39 +204,40 @@ def main():
                 continue
   
             for i in range(0, len(album_Q1), 3):
+                answers = []
                 
                 albums = album_Q1[i:i+3]
                 
                 if len(albums) < 3:
                     break
                 
-                answer = random.choice(albums)
+                answer_date = random.choice(albums)[2][0:4]
                 
-                date_list = list(answer[2])
-                year1 = date_list[0]
-                year2 = date_list[1]
-                year3 = date_list[2]
-                year4 = date_list[3]
+                for album in albums:
+                    if album[2][0:4] == answer_date:
+                        answers += [album[0]]
+                        
                 
-                print(f"\nWhich album was released in {year1}{year2}{year3}{year4}\n")
+                
+                print(f"\nWhich album was released in {answer_date}\n")
                 print(f"\n1. {albums[0][0]} - {albums[0][1]}\n2. {albums[1][0]} - {albums[1][1]}\n3. {albums[2][0]} - {albums[2][1]}\n")
         
-                hint = list(answer[0])[0]
+                hint = list(answers[0])[0]
 
                 response_6 = input(f"\nGuess the album from the list above: ")
-                if response_6.lower() == answer[0].lower():
-                    score += 10
-                    print(f"Correct! The album was {answer[0]}. Your score is {score}/50.")
+                if response_6 in answers:
+                    print(f"Correct! The album was {response_6}.")
                     
                 else:
                     response_30 = input(f"\nIncorrect. Try Again: ")
-                    if response_30.lower() == answer[0].lower():
-                        score += 10
-                        print(f"Correct! The album was {answer[0]}. Your score is {score}/50.")
+                    if response_30 in answers:
+                        print(f"Correct! The album was {response_30}.")
                     else: 
-                        if score >= 10:
-                            score -= 10
-                        print(f"Incorrect. The correct album was {answer[0]}. Your score is {score}/50.\n")
+                        score -= 10
+                        if len(answers) > 1:
+                            print(f"Incorrect. The correct album was either {answers[0]} or {answers[1]}. Your score is {score}/50.\n")
+                        else:
+                            print(f"Incorrect. The correct album was {answers[0]}. Your score is {score}/50.\n")
             
             print(f"\nYour total score is {score}/50\n")
                 
