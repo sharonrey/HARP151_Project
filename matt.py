@@ -40,7 +40,7 @@ else:
 #id = "40ZNYROS4zLfyyBSs2PGe2"  zach bryan
 #id = "6KImCVD70vtIoJWnq6nGn3" #harry styles
 
-hiphop = [
+rap = [
     "Drake", "Kendrick Lamar", "Travis Scott", "Post Malone", "Eminem",
     "Kanye West", "Future", "Playboi Carti", "Doja Cat", "Pitbull",
     "Lil Nas X", "21 Savage", "Lil Baby", "Tyler, The Creator", "Juice WRLD",
@@ -60,10 +60,13 @@ pop = [
     "Sia", "Selena Gomez", "Tate McRae", "Gracie Abrams", "Miley Cyrus",
     "Sam Smith", "Benson Boone", "Teddy Swims", "Maroon 5", "OneRepublic",
     "Olivia Rodrigo", "Shawn Mendes", "Camila Cabello", "Michael Jackson", "Lauv",
-    "Ava Max", "Zara Larsson", "Troye Sivan", "Conan Gray", "Charlie Puth"]
-rock = [
+    "Ava Max", "Zara Larsson", "Troye Sivan", "Conan Gray", "Charlie Puth","Harry Styles"]
+indierock = [
     "Coldplay", "Imagine Dragons", "Arctic Monkeys", "Queen", "Lana Del Rey",
     "The Killers", "Red Hot Chili Peppers", "Foo Fighters", "Paramore", "Green Day"] 
+
+country = ["Morgan Wallen","Luke Combs", "Zach Bryan","Carrie Underwood","Shaboozey","Alan Jackson"
+           ,"Tim Mcgraw","Kenny Chesney","Reba McEntire"]
 
 
 
@@ -77,20 +80,22 @@ headers = {
 def get_artist(genre):
     if genre == pop :
         x = random.choice(pop)
-    elif genre == rock:
-        x = random.choice(rock)
+    elif genre == indierock:
+        x = random.choice(indierock)
     elif genre == electronic :
         x = random.choice(electronic)
-    elif genre == hiphop :
-        x = random.choice(hiphop)
+    elif genre == rap :
+        x = random.choice(rap)
     elif genre == latin : 
         x = random.choice(latin)
     elif genre == rnb :
         x = random.choice(rnb)
+    elif genre == country :
+        x = random.choice(country)
     return x 
 
     
-artist = get_artist(pop)
+artist = get_artist(country)
 
 url = f"https://api.spotify.com/v1/artists/{id}"
 
@@ -118,53 +123,54 @@ artist_id = data['id']
 
 
 answer_list = []
-def restart():
-    
-    raan = random.randint(0,max-1)
-    image_name2 = alb_data['items'][raan]['name']
-    answer_list.append(image_name2)
+
+al_list = []
+for ww in range(max):
+    #print(alb_data['items'][ww]['name'])
+    #print(alb_data['items'][ww]['name'])
+    if alb_data['items'][ww]['album_type'] == 'album' :
+        al_list.append(alb_data['items'][ww]['name'])
+#print(al_list)
+
+def answers():
+    random_answer = random.sample(al_list,3)
+    for i in range(3) :
+        answer_list.append(random_answer[i])
+    one = answer_list[0]
+    two = answer_list[1]
+    three = answer_list[2]
+    print(answer_list)
+    return one , two , three 
 
 
-def h():
-    for i in range (3):
-        raan = random.randint(0,max-1)
-        image_name2 = alb_data['items'][raan]['name']
-        if image_name2 not in answer_list :
-            image_name2 = alb_data['items'][raan]['name']
-            answer_list.append(image_name2)
-        else :
-            restart()
-    return answer_list
+#ran = random.randint(0,max-1)
+#image_url = alb_data['items'][ran]['images'][0]['url']
+#image_name = alb_data['items'][ran]['name']
+#answer_list.append(image_name)
+answers()
+i = 0 
+while True :
+    if alb_data['items'][i]['name'] not in answer_list and alb_data['items'][i]['album_type'] == 'album' : 
+        image_url = alb_data['items'][i]['images'][0]['url']
+        image_name = alb_data['items'][i]['name']
+        answer_list.append(image_name)
+        break 
+    else : 
+        i +=1
+
+print(answer_list)
+
+def daname():
+    return(image_name)
 
 
-
-#h does not work 
-
-
-#def otherim_name():
- #   w = 0
-  #  while w < 4 :
-   #     raan = random.randint(0,max-1)
-    #    image_name1 = alb_data['items'][raan]['name']
-     #   answer_list.append(image_name1)
-      #  for i in answer_list :
-       #     if i != image_name1 :
-        #        answer_list.append(image_name1)
-         #       w+=1
-          #  else:
-           #     raan = random.randint(0,max-1)
-   # print(answer_list)
 
 def image():
-    ran = random.randint(0,max-1)
-    image_url = alb_data['items'][ran]['images'][0]['url']
-    image_name = alb_data['items'][ran]['name']
-    answer_list.append(image_name)
-    print(answer_list)
-    print(h())
-    print(data['name'])
-    print(image_name)
-    return image_url
+    return(image_url)
+    #print(answer_list)
+    #print(h(country))
+    #print(image_name)
+    #print(data['name'])
     #print(image_name)
     #urllib.request.urlretrieve(image_url, f'{image_name}.jpg')
     #img = Image.open(f'{image_name}.jpg')
@@ -226,4 +232,51 @@ canvas.pack()
 #print(data)
 
 display_image(image())
+
+
+
+random_answer2 = random.sample(answer_list,4)
+
+
+#for o in range(4):
+#    answer_list2.append(random_answer2[o])
+
+    
+# canvas work 
+question = 'What album is this ?'
+quesiton_label = tk.Label(root,text= question, bg="#67D771",font=('ariel',15),foreground='black').pack()
+
+
+def chosen_option():
+    points = 0
+    choice = answer.get()
+    select = ""
+
+    if choice == answer_list[3] : 
+        points += 10
+        select = "Correct"
+    else :
+        points +=0
+        select ="Wrong"
+    
+    result_label = tk.Label(root, text=f"{choice} is {select}!")
+    result_label.pack()
+    
+    answer.set("Select a album")
+    
+    return choice
+
+#set() est's the initial value
+answer = tk.StringVar()
+answer.set("Pick an Album ")
+
+#dropdownmenu syntax, tie it to a tkinter variable and a list
+dropdown = tk.OptionMenu(root, answer, *random_answer2)
+choose_btn = tk.Button(root, text="Click to submit", command=chosen_option)
+
+dropdown.pack()
+choose_btn.pack()
+
+
+
 root.mainloop()
